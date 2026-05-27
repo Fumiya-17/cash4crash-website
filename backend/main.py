@@ -15,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 Base.metadata.create_all(bind=engine)
 
 from analytics_database import engine as analytics_engine, BaseAnalytics
+import analytics_models
 BaseAnalytics.metadata.create_all(bind=analytics_engine)
 
 import seed_cars
