@@ -95,26 +95,33 @@ cars_data = [
   }
 ]
 
-db = SessionLocal()
-try:
-    # Clear existing
-    db.query(Car).delete()
-    
-    # Insert new
-    for c in cars_data:
-        car = Car(
-            id=c["id"],
-            brand=c["brand"],
-            name=c["name"],
-            make=c["make"],
-            model_year=c["model"],
-            image=c["image"],
-            price=c["price"],
-            specs=json.dumps(c["specs"])
-        )
-        db.add(car)
+def seed():
+    db = SessionLocal()
+    try:
+        if db.query(Car).count() > 0:
+            print("Database already seeded.")
+            return
+
+        print("Seeding database...")
+        db.query(Car).delete()
         
-    db.commit()
-    print("Database seeded with 15 cars successfully!")
-finally:
-    db.close()
+        for c in cars_data:
+            car = Car(
+                id=c["id"],
+                brand=c["brand"],
+                name=c["name"],
+                make=c["make"],
+                model_year=c["model"],
+                image=c["image"],
+                price=c["price"],
+                specs=json.dumps(c["specs"])
+            )
+            db.add(car)
+            
+        db.commit()
+        print("Database seeded with 15 cars successfully!")
+    finally:
+        db.close()
+
+if __name__ == "__main__":
+    seed()
