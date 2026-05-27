@@ -220,6 +220,9 @@ def get_dashboard(uid: str = Depends(get_current_user_uid), db: Session = Depend
     from analytics_database import SessionLocalAnalytics
     from analytics_models import DailyStat, TopProduct
     
+    import etl
+    etl.run_etl()
+    
     analytics_db = SessionLocalAnalytics()
     try:
         today_str = datetime.datetime.utcnow().strftime("%Y-%m-%d")
