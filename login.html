@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cash4Crash — Sign In / Register</title>
+  <meta name="description" content="Sign in or create your Cash4Crash account to browse, save, and inquire on thousands of pre-screened vehicles across the Philippines." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #111210;
+      --bg2:      #181917;
+      --bg3:      #1e1f1d;
+      --surface:  #242523;
+      --border:   rgba(255,255,255,0.07);
+      --border-hover: rgba(200,169,110,0.35);
+      --text:     #f0ede8;
+      --muted:    #8a8880;
+      --accent:   #c8a96e;
+      --accent2:  #e8d5a8;
+      --red:      #c0392b;
+      --green:    #27ae60;
+      --radius:   12px;
+      --nav-h:    72px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(17,18,16,0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.12em;
+      color: var(--text); text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 40px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--muted); text-decoration: none; text-transform: uppercase;
+      transition: color 0.2s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 100%;
+      height: 1px; background: var(--accent); transition: right 0.25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { right: 0; }
+
+    .btn-ghost {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 9px 20px; border-radius: 6px; cursor: pointer;
+      text-transform: uppercase; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(17,18,16,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px; letter-spacing: 0.06em; color: var(--text);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .mobile-nav a:hover { color: var(--accent); }
+    .close-btn {
+      position: absolute; top: 24px; right: 24px;
+      background: none; border: none; cursor: pointer;
+      font-size: 32px; color: var(--muted);
+    }
+
+    /* ─── PAGE LAYOUT ─── */
+    .page-wrap {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* ─── LEFT PANEL (visual) ─── */
+    .auth-visual {
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    .auth-visual-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, rgba(10,10,9,0.15) 0%, rgba(10,10,9,0.5) 100%),
+        linear-gradient(to top, rgba(10,10,9,0.85) 0%, transparent 55%),
+        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1200&q=85&auto=format&fit=crop') center/cover no-repeat;
+      transform: scale(1.04);
+      animation: visualZoom 14s ease-out forwards;
+    }
+    @keyframes visualZoom {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1.00); }
+    }
+
+    .auth-visual-content {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      height: 100%;
+      padding: 60px 56px;
+    }
+
+    .visual-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 24px; align-self: flex-start;
+      opacity: 0; animation: fadeUp 0.7s 0.3s forwards;
+    }
+    .visual-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    .visual-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 5vw, 72px);
+      line-height: 0.92; letter-spacing: 0.02em;
+      color: var(--text);
+      opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .visual-headline em { color: var(--accent); font-style: normal; }
+
+    .visual-sub {
+      font-size: 15px; font-weight: 300; color: rgba(240,237,232,0.6);
+      line-height: 1.65; max-width: 360px;
+      margin-top: 18px;
+      opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+    }
+
+    .visual-stats {
+      display: flex; gap: 40px; margin-top: 48px;
+      padding-top: 32px; border-top: 1px solid var(--border);
+      opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+    }
+    .v-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 34px; letter-spacing: 0.04em; color: var(--accent);
+    }
+    .v-stat-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted); margin-top: 2px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── RIGHT PANEL (form) ─── */
+    .auth-form-panel {
+      background: var(--bg2);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: calc(var(--nav-h) + 40px) 64px 60px;
+      min-height: 100vh;
+    }
+
+    .auth-card {
+      width: 100%; max-width: 440px;
+      opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+    }
+
+    /* ─── TAB SWITCHER ─── */
+    .auth-tabs {
+      display: flex;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 36px;
+    }
+
+    .auth-tab {
+      flex: 1; padding: 11px 0;
+      font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; border: none; cursor: pointer;
+      border-radius: 7px; background: transparent;
+      color: var(--muted); transition: all 0.25s;
+    }
+    .auth-tab.active {
+      background: var(--accent);
+      color: #111;
+      box-shadow: 0 4px 16px rgba(200,169,110,0.25);
+    }
+
+    /* ─── FORM HEADINGS ─── */
+    .form-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px; letter-spacing: 0.03em;
+      color: var(--text); margin-bottom: 6px;
+    }
+    .form-sub {
+      font-size: 14px; font-weight: 300; color: var(--muted);
+      margin-bottom: 32px; line-height: 1.6;
+    }
+    .form-sub a { color: var(--accent); text-decoration: none; }
+    .form-sub a:hover { text-decoration: underline; }
+
+    /* ─── FORM PANES ─── */
+    .form-pane { display: none; }
+    .form-pane.active { display: block; }
+
+    /* ─── SOCIAL LOGIN ─── */
+    .social-login {
+      display: flex; gap: 12px; margin-bottom: 28px;
+    }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 11px 16px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--bg3);
+      color: var(--text); font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 500; cursor: pointer;
+      transition: all 0.2s; text-decoration: none;
+    }
+    .social-btn:hover { border-color: var(--border-hover); background: var(--surface); }
+    .social-btn svg { flex-shrink: 0; }
+
+    .divider {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 28px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .divider span {
+      font-size: 12px; color: var(--muted); letter-spacing: 0.08em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    /* ─── FORM FIELDS ─── */
+    .field-group { margin-bottom: 18px; position: relative; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    label {
+      display: block; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+    .field-group:focus-within label { color: var(--accent); }
+
+    .input-wrap {
+      position: relative; display: flex; align-items: center;
+    }
+    .input-icon {
+      position: absolute; left: 14px; color: var(--muted);
+      pointer-events: none; transition: color 0.2s;
+      display: flex; align-items: center;
+    }
+    .field-group:focus-within .input-icon { color: var(--accent); }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 13px 14px 13px 42px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px; font-weight: 400;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      appearance: none;
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus {
+      border-color: var(--accent);
+      background: rgba(200,169,110,0.04);
+      box-shadow: 0 0 0 3px rgba(200,169,110,0.1);
+    }
+    input.has-error { border-color: var(--red); }
+    input.has-error:focus { box-shadow: 0 0 0 3px rgba(192,57,43,0.12); }
+
+    /* password toggle */
+    .pwd-toggle {
+      position: absolute; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); display: flex; align-items: center;
+      transition: color 0.2s; padding: 0;
+    }
+    .pwd-toggle:hover { color: var(--accent); }
+
+    /* error message */
+    .field-error {
+      font-size: 11px; color: var(--red);
+      margin-top: 6px; display: none;
+      align-items: center; gap: 4px;
+    }
+    .field-error.show { display: flex; }
+
+    /* ─── PASSWORD STRENGTH ─── */
+    .pwd-strength {
+      margin-top: 10px; display: none;
+    }
+    .pwd-strength.show { display: block; }
+    .strength-bar {
+      display: flex; gap: 4px; margin-bottom: 6px;
+    }
+    .strength-seg {
+      flex: 1; height: 3px; border-radius: 2px;
+      background: var(--border); transition: background 0.3s;
+    }
+    .strength-seg.weak   { background: var(--red); }
+    .strength-seg.fair   { background: #e67e22; }
+    .strength-seg.good   { background: #f1c40f; }
+    .strength-seg.strong { background: var(--green); }
+    .strength-label {
+      font-size: 11px; color: var(--muted); letter-spacing: 0.06em;
+    }
+
+    /* ─── CHECKBOX ─── */
+    .check-group {
+      display: flex; align-items: flex-start; gap: 12px;
+      margin-bottom: 24px;
+    }
+    .check-group input[type="checkbox"] {
+      width: 18px; height: 18px; min-width: 18px;
+      padding: 0; margin-top: 1px;
+      accent-color: var(--accent);
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .check-group label {
+      font-size: 13px; font-weight: 300; color: var(--muted);
+      text-transform: none; letter-spacing: 0; margin-bottom: 0; cursor: pointer;
+    }
+    .check-group label a { color: var(--accent); text-decoration: none; }
+    .check-group label a:hover { text-decoration: underline; }
+
+    /* ─── FORGOT PASSWORD ─── */
+    .forgot-row {
+      display: flex; justify-content: flex-end; margin-bottom: 24px; margin-top: -8px;
+    }
+    .forgot-link {
+      font-size: 12px; color: var(--muted); text-decoration: none;
+      transition: color 0.2s; letter-spacing: 0.04em;
+    }
+    .forgot-link:hover { color: var(--accent); }
+
+    /* ─── SUBMIT BUTTON ─── */
+    .btn-submit {
+      width: 100%;
+      background: var(--accent); border: none;
+      color: #111; font-family: 'Barlow', sans-serif;
+      font-size: 14px; font-weight: 700; letter-spacing: 0.1em;
+      padding: 15px 28px; border-radius: 8px; cursor: pointer;
+      text-transform: uppercase; transition: all 0.25s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      position: relative; overflow: hidden;
+    }
+    .btn-submit::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .btn-submit:hover {
+      background: var(--accent2);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgba(200,169,110,0.3);
+    }
+    .btn-submit:hover::before { opacity: 1; }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* loading state */
+    .btn-submit.loading .btn-text { opacity: 0; }
+    .btn-submit .spinner {
+      position: absolute;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(17,18,16,0.3);
+      border-top-color: #111;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+    .btn-submit.loading .spinner { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── DIVIDER SWITCH ─── */
+    .switch-prompt {
+      text-align: center; margin-top: 28px;
+      font-size: 13px; color: var(--muted);
+    }
+    .switch-prompt a {
+      color: var(--accent); text-decoration: none; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .switch-prompt a:hover { color: var(--accent2); }
+
+    /* ─── SUCCESS STATE ─── */
+    .success-state {
+      display: none; text-align: center;
+      padding: 48px 0;
+    }
+    .success-state.show { display: block; }
+    .success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(39,174,96,0.12); border: 1px solid rgba(39,174,96,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 32px;
+    }
+    .success-state h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; letter-spacing: 0.03em; margin-bottom: 10px;
+    }
+    .success-state p {
+      font-size: 14px; color: var(--muted); line-height: 1.65; max-width: 300px; margin: 0 auto 28px;
+    }
+
+    /* ─── TOAST NOTIFICATION ─── */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 22px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 14px; color: var(--text);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.5);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+      z-index: 999; white-space: nowrap; opacity: 0;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .toast.success .toast-dot { background: var(--green); }
+    .toast.error .toast-dot { background: var(--red); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .page-wrap { grid-template-columns: 1fr; }
+      .auth-visual { display: none; }
+      .auth-form-panel { padding: calc(var(--nav-h) + 32px) 28px 48px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links, .nav-links + .btn-ghost { display: none; }
+      .hamburger { display: flex; }
+    }
+  </style>
+  <!-- Firebase SDK (v10 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#">Collections</a></li>
+      <li><a href="#">Financing</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div style="display:flex;gap:16px;align-items:center;">
+
+      <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="close-btn" onclick="toggleNav()" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="index.html" onclick="toggleNav()">Home</a>
+    <a href="#" onclick="toggleNav()">Collections</a>
+    <a href="#" onclick="toggleNav()">Financing</a>
+    <a href="#" onclick="toggleNav()">Contact</a>
+  </div>
+
+  <!-- PAGE LAYOUT -->
+  <div class="page-wrap">
+
+    <!-- LEFT: VISUAL PANEL -->
+    <div class="auth-visual">
+      <div class="auth-visual-bg"></div>
+      <div class="auth-visual-content">
+        <div class="visual-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2.5 2.5"/></svg>
+          &nbsp; Philippines' Premier Auto Marketplace
+        </div>
+        <h1 class="visual-headline">Your Dream<br/>Car is <em>One<br/>Login</em> Away.</h1>
+        <p class="visual-sub">Join thousands of buyers finding fair prices on pre-screened vehicles from trusted dealers across the Philippines.</p>
+        <div class="visual-stats">
+          <div>
+            <div class="v-stat-num">2,400+</div>
+            <div class="v-stat-label">Vehicles Listed</div>
+          </div>
+          <div>
+            <div class="v-stat-num">98%</div>
+            <div class="v-stat-label">Satisfied Buyers</div>
+          </div>
+          <div>
+            <div class="v-stat-num">15+</div>
+            <div class="v-stat-label">Years Experience</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM PANEL -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+
+        <!-- TAB SWITCHER -->
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab active" id="tab-login" role="tab" aria-selected="true" aria-controls="pane-login" onclick="switchTab('login')">Sign In</button>
+          <button class="auth-tab" id="tab-register" role="tab" aria-selected="false" aria-controls="pane-register" onclick="switchTab('register')">Register</button>
+        </div>
+
+        <!-- ═══ LOGIN PANE ═══ -->
+        <div class="form-pane active" id="pane-login" role="tabpanel" aria-labelledby="tab-login">
+
+          <h2 class="form-heading">Welcome Back.</h2>
+          <p class="form-sub">Don't have an account? <a href="#" onclick="switchTab('register');return false;">Create one free →</a></p>
+
+          <!-- Social Login -->
+          <div class="social-login">
+            <button class="social-btn" id="btn-google-login" onclick="handleSocial('Google')">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              Continue with Google
+            </button>
+          </div>
+
+          <div class="divider"><span>or sign in with email</span></div>
+
+          <form id="form-login" novalidate onsubmit="handleLogin(event)">
+            <!-- Email -->
+            <div class="field-group">
+              <label for="login-email">Email Address</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+                </span>
+                <input type="email" id="login-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+              </div>
+              <div class="field-error" id="err-login-email">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                Please enter a valid email address.
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="field-group">
+              <label for="login-password">Password</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <input type="password" id="login-password" name="password" placeholder="Enter your password" autocomplete="current-password" required />
+                <button type="button" class="pwd-toggle" id="toggle-login-pwd" onclick="togglePwd('login-password','toggle-login-pwd')" aria-label="Toggle password visibility">
+                  <svg id="eye-login" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+              <div class="field-error" id="err-login-password">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                Please enter your password.
+              </div>
+            </div>
+
+            <div class="forgot-row">
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+
+            <!-- Remember me -->
+            <div class="check-group">
+              <input type="checkbox" id="remember-me" name="remember" />
+              <label for="remember-me">Keep me signed in on this device</label>
+            </div>
+
+            <button type="submit" class="btn-submit" id="btn-login">
+              <div class="spinner"></div>
+              <span class="btn-text">
+                Sign In
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </button>
+          </form>
+        </div>
+
+        <!-- ═══ REGISTER PANE ═══ -->
+        <div class="form-pane" id="pane-register" role="tabpanel" aria-labelledby="tab-register">
+
+          <div id="reg-form-content">
+            <h2 class="form-heading">Create Account.</h2>
+            <p class="form-sub">Already have an account? <a href="#" onclick="switchTab('login');return false;">Sign in →</a></p>
+
+            <!-- Social Register -->
+            <div class="social-login">
+              <button class="social-btn" id="btn-google-register" onclick="handleSocial('Google')">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                Sign up with Google
+              </button>
+            </div>
+
+            <div class="divider"><span>or register with email</span></div>
+
+            <form id="form-register" novalidate onsubmit="handleRegister(event)">
+
+              <!-- Name row -->
+              <div class="field-row">
+                <div class="field-group">
+                  <label for="reg-fname">First Name</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <input type="text" id="reg-fname" name="fname" placeholder="Juan" autocomplete="given-name" required />
+                  </div>
+                  <div class="field-error" id="err-reg-fname">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Required.
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label for="reg-lname">Last Name</label>
+                  <div class="input-wrap">
+                    <span class="input-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <input type="text" id="reg-lname" name="lname" placeholder="dela Cruz" autocomplete="family-name" required />
+                  </div>
+                  <div class="field-error" id="err-reg-lname">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                    Required.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="field-group">
+                <label for="reg-email">Email Address</label>
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+                  </span>
+                  <input type="email" id="reg-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+                </div>
+                <div class="field-error" id="err-reg-email">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                  Please enter a valid email address.
+                </div>
+              </div>
+
+              <!-- Phone -->
+              <div class="field-group">
+                <label for="reg-phone">Mobile Number</label>
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.17h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </span>
+                  <input type="tel" id="reg-phone" name="phone" placeholder="+63 917 000 0000" autocomplete="tel" />
+                </div>
+              </div>
+
+              <!-- Password -->
+              <div class="field-group">
+                <label for="reg-password">Password</label>
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="reg-password" name="password" placeholder="Min. 8 characters" autocomplete="new-password" required oninput="checkStrength(this.value)" />
+                  <button type="button" class="pwd-toggle" id="toggle-reg-pwd" onclick="togglePwd('reg-password','toggle-reg-pwd')" aria-label="Toggle password visibility">
+                    <svg id="eye-reg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+                <div class="field-error" id="err-reg-password">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                  Password must be at least 8 characters.
+                </div>
+                <!-- Strength meter -->
+                <div class="pwd-strength" id="pwd-strength">
+                  <div class="strength-bar">
+                    <div class="strength-seg" id="seg1"></div>
+                    <div class="strength-seg" id="seg2"></div>
+                    <div class="strength-seg" id="seg3"></div>
+                    <div class="strength-seg" id="seg4"></div>
+                  </div>
+                  <span class="strength-label" id="strength-label">Too short</span>
+                </div>
+              </div>
+
+              <!-- Confirm Password -->
+              <div class="field-group">
+                <label for="reg-confirm">Confirm Password</label>
+                <div class="input-wrap">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </span>
+                  <input type="password" id="reg-confirm" name="confirm" placeholder="Re-enter password" autocomplete="new-password" required />
+                  <button type="button" class="pwd-toggle" id="toggle-reg-confirm" onclick="togglePwd('reg-confirm','toggle-reg-confirm')" aria-label="Toggle confirm password visibility">
+                    <svg id="eye-confirm" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+                <div class="field-error" id="err-reg-confirm">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                  Passwords do not match.
+                </div>
+              </div>
+
+              <!-- Terms -->
+              <div class="check-group">
+                <input type="checkbox" id="reg-terms" name="terms" required />
+                <label for="reg-terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+              </div>
+              <div class="field-error" id="err-reg-terms" style="margin-top:-16px;margin-bottom:18px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                You must agree to continue.
+              </div>
+
+              <button type="submit" class="btn-submit" id="btn-register">
+                <div class="spinner"></div>
+                <span class="btn-text">
+                  Create Account
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <!-- SUCCESS STATE -->
+          <div class="success-state" id="reg-success">
+            <div class="success-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <h3>Welcome, <span id="reg-success-name"></span>!</h3>
+            <p>Your account has been created. A verification email has been sent to <strong id="reg-success-email" style="color:var(--accent);"></strong> — check your inbox to activate your account.</p>
+            <a href="index.html" class="btn-submit" style="text-decoration:none;">
+              Browse Inventory
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /auth-card -->
+    </div><!-- /auth-form-panel -->
+  </div><!-- /page-wrap -->
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" role="alert" aria-live="polite">
+    <div class="toast-dot"></div>
+    <span id="toast-msg"></span>
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════════════
+       FIREBASE CONFIG
+       Replace the values below with your own project's
+       config from: Firebase Console → Project Settings
+       → Your apps → Firebase SDK snippet → Config
+    ════════════════════════════════════════════════ */
+    const firebaseConfig = {
+      apiKey:            "AIzaSyBiTs1bz0UwFpQ6X15gWvBYXNFLeJiLUks",
+      authDomain:        "cash4crash-c9fcd.firebaseapp.com",
+      projectId:         "cash4crash-c9fcd",
+      storageBucket:     "cash4crash-c9fcd.firebasestorage.app",
+      messagingSenderId: "529034294123",
+      appId:             "1:529034294123:web:77943157c0cfc5cef7122e",
+      measurementId:     "G-4MPKZMDEBJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth      = firebase.auth();
+    const analytics = firebase.analytics();
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+    /* ─── PERSISTENCE ("Keep me signed in") ─── */
+    /* Default is SESSION; we switch to LOCAL when checkbox is ticked */
+    function getPersistence() {
+      return document.getElementById('remember-me')?.checked
+        ? firebase.auth.Auth.Persistence.LOCAL
+        : firebase.auth.Auth.Persistence.SESSION;
+    }
+
+    /* ─── AUTH STATE OBSERVER ─── */
+    auth.onAuthStateChanged(user => {
+      const navActions = document.querySelector('nav > div');
+      if (!navActions) return;
+
+      if (user) {
+        // Replace the search + hamburger row with a greeting + sign-out
+        const displayName = user.displayName
+          ? user.displayName.split(' ')[0]
+          : user.email.split('@')[0];
+
+        navActions.innerHTML = `
+          <span style="font-size:13px;color:var(--accent);font-weight:500;letter-spacing:0.06em;text-transform:uppercase;">
+            Hi, ${displayName}
+          </span>
+          <button onclick="handleSignOut()" class="btn-ghost" style="cursor:pointer;">
+            Sign Out
+          </button>
+        `;
+      }
+    });
+
+    /* ─── TAB SWITCH ─── */
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => {
+        t.classList.toggle('active', t.id === `tab-${tab}`);
+        t.setAttribute('aria-selected', t.id === `tab-${tab}`);
+      });
+      document.querySelectorAll('.form-pane').forEach(p => {
+        p.classList.toggle('active', p.id === `pane-${tab}`);
+      });
+    }
+
+    /* ─── MOBILE NAV ─── */
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+
+    /* ─── PASSWORD TOGGLE ─── */
+    function togglePwd(inputId, btnId) {
+      const inp = document.getElementById(inputId);
+      const isHidden = inp.type === 'password';
+      inp.type = isHidden ? 'text' : 'password';
+      // swap icon
+      const btn = document.getElementById(btnId);
+      btn.querySelector('svg').innerHTML = isHidden
+        ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+
+    /* ─── PASSWORD STRENGTH ─── */
+    function checkStrength(val) {
+      const meter = document.getElementById('pwd-strength');
+      const label = document.getElementById('strength-label');
+      const segs = [document.getElementById('seg1'), document.getElementById('seg2'), document.getElementById('seg3'), document.getElementById('seg4')];
+
+      if (!val) { meter.classList.remove('show'); return; }
+      meter.classList.add('show');
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      const levels = ['', 'weak', 'fair', 'good', 'strong'];
+      const labels = ['Too short','Weak','Fair','Good','Strong'];
+
+      segs.forEach((s, i) => {
+        s.className = 'strength-seg';
+        if (i < score) s.classList.add(levels[score]);
+      });
+      label.textContent = val.length < 8 ? 'Too short' : labels[score];
+      label.style.color = ['#8a8880','#c0392b','#e67e22','#f1c40f','#27ae60'][score] || '#8a8880';
+    }
+
+    /* ─── FIELD VALIDATION ─── */
+    function validateField(inputId, errId, test) {
+      const inp = document.getElementById(inputId);
+      const err = document.getElementById(errId);
+      const valid = test(inp.value);
+      inp.classList.toggle('has-error', !valid);
+      err.classList.toggle('show', !valid);
+      return valid;
+    }
+
+
+    /* ════════════════════════════
+       GOOGLE SIGN-IN
+    ════════════════════════════ */
+    function handleSocial(provider) {
+      if (provider !== 'Google') {
+        showToast(`${provider} sign-in coming soon!`, 'error'); return;
+      }
+      auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => auth.signInWithPopup(googleProvider))
+        .then(result => {
+          const name = result.user.displayName || result.user.email;
+          showToast(`Welcome, ${name.split(' ')[0]}! Redirecting…`, 'success');
+          setTimeout(() => { window.location.href = 'index.html'; }, 1600);
+        })
+        .catch(err => {
+          if (err.code !== 'auth/popup-closed-by-user') {
+            showToast(friendlyError(err.code), 'error');
+          }
+        });
+    }
+
+    /* ════════════════════════════
+       SIGN IN (email + password)
+    ════════════════════════════ */
+    function handleLogin(e) {
+      e.preventDefault();
+      let ok = true;
+      ok = validateField('login-email',    'err-login-email',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && ok;
+      ok = validateField('login-password', 'err-login-password', v => v.length >= 1) && ok;
+      if (!ok) return;
+
+      const btn   = document.getElementById('btn-login');
+      const email = document.getElementById('login-email').value.trim();
+      const pass  = document.getElementById('login-password').value;
+
+      btn.classList.add('loading'); btn.disabled = true;
+
+      auth.setPersistence(getPersistence())
+        .then(() => auth.signInWithEmailAndPassword(email, pass))
+        .then(cred => {
+          if (!cred.user.emailVerified) {
+            // Still let them in but warn
+            showToast('Please verify your email soon.', 'error');
+          } else {
+            showToast('Signed in! Redirecting…', 'success');
+          }
+          setTimeout(() => { window.location.href = 'index.html'; }, 1600);
+        })
+        .catch(err => {
+          btn.classList.remove('loading'); btn.disabled = false;
+          showToast(friendlyError(err.code), 'error');
+          if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+            document.getElementById('login-email').classList.add('has-error');
+            document.getElementById('login-password').classList.add('has-error');
+          }
+        });
+    }
+
+    /* ─── Forgot password ─── */
+    document.querySelector('.forgot-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast('Enter your email above first, then click Forgot password.', 'error');
+        document.getElementById('login-email').focus();
+        return;
+      }
+      auth.sendPasswordResetEmail(email)
+        .then(() => showToast('Password reset email sent! Check your inbox.', 'success'))
+        .catch(err => showToast(friendlyError(err.code), 'error'));
+    });
+
+    /* ════════════════════════════
+       REGISTER (email + password)
+    ════════════════════════════ */
+    function handleRegister(e) {
+      e.preventDefault();
+      let ok = true;
+      ok = validateField('reg-fname',    'err-reg-fname',    v => v.trim().length >= 1) && ok;
+      ok = validateField('reg-lname',    'err-reg-lname',    v => v.trim().length >= 1) && ok;
+      ok = validateField('reg-email',    'err-reg-email',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) && ok;
+      ok = validateField('reg-password', 'err-reg-password', v => v.length >= 8) && ok;
+      ok = validateField('reg-confirm',  'err-reg-confirm',  v => v === document.getElementById('reg-password').value) && ok;
+
+      const terms    = document.getElementById('reg-terms');
+      const termsErr = document.getElementById('err-reg-terms');
+      if (!terms.checked) { termsErr.classList.add('show'); ok = false; }
+      else { termsErr.classList.remove('show'); }
+
+      if (!ok) return;
+
+      const btn      = document.getElementById('btn-register');
+      const email    = document.getElementById('reg-email').value.trim();
+      const pass     = document.getElementById('reg-password').value;
+      const fname    = document.getElementById('reg-fname').value.trim();
+      const lname    = document.getElementById('reg-lname').value.trim();
+      const fullName = `${fname} ${lname}`;
+
+      btn.classList.add('loading'); btn.disabled = true;
+
+      auth.createUserWithEmailAndPassword(email, pass)
+        .then(cred => {
+          /* Set display name */
+          return cred.user.updateProfile({ displayName: fullName })
+            .then(() => cred.user.sendEmailVerification())
+            .then(() => cred.user);
+        })
+        .then(user => {
+          btn.classList.remove('loading'); btn.disabled = false;
+          /* Show success screen */
+          document.getElementById('reg-success-name').textContent = fname;
+          document.getElementById('reg-success-email').textContent = user.email;
+          document.getElementById('reg-form-content').style.display = 'none';
+          document.getElementById('reg-success').classList.add('show');
+        })
+        .catch(err => {
+          btn.classList.remove('loading'); btn.disabled = false;
+          showToast(friendlyError(err.code), 'error');
+          if (err.code === 'auth/email-already-in-use') {
+            document.getElementById('reg-email').classList.add('has-error');
+            document.getElementById('err-reg-email').querySelector('span') &&
+              (document.getElementById('err-reg-email').lastChild.textContent = ' Email already in use.');
+            document.getElementById('err-reg-email').classList.add('show');
+          }
+        });
+    }
+
+    /* ─── Sign out ─── */
+    function handleSignOut() {
+      auth.signOut().then(() => {
+        showToast('Signed out.', 'success');
+        setTimeout(() => window.location.reload(), 800);
+      });
+    }
+
+    /* ════════════════════════════
+       HELPERS
+    ════════════════════════════ */
+    function friendlyError(code) {
+      const map = {
+        'auth/email-already-in-use':    'That email is already registered. Try signing in.',
+        'auth/invalid-email':           'Please enter a valid email address.',
+        'auth/weak-password':           'Password is too weak. Use at least 8 characters.',
+        'auth/user-not-found':          'No account found for that email.',
+        'auth/wrong-password':          'Incorrect password. Try again or reset it.',
+        'auth/too-many-requests':       'Too many attempts. Please wait a moment and try again.',
+        'auth/network-request-failed':  'Network error. Check your connection and try again.',
+        'auth/popup-blocked':           'Pop-up blocked by your browser. Please allow pop-ups for this site.',
+        'auth/operation-not-allowed':   'This sign-in method is not enabled. Contact support.',
+        'auth/invalid-credential':      'Incorrect email or password.',
+      };
+      return map[code] || 'Something went wrong. Please try again.';
+    }
+
+    function validateField(inputId, errId, test) {
+      const inp = document.getElementById(inputId);
+      const err = document.getElementById(errId);
+      const valid = test(inp.value);
+      inp.classList.toggle('has-error', !valid);
+      err.classList.toggle('show', !valid);
+      return valid;
+    }
+
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      const m = document.getElementById('toast-msg');
+      t.className = `toast ${type}`;
+      m.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    /* ─── Password strength ─── */
+    function checkStrength(val) {
+      const meter = document.getElementById('pwd-strength');
+      const label = document.getElementById('strength-label');
+      const segs  = [document.getElementById('seg1'), document.getElementById('seg2'),
+                     document.getElementById('seg3'), document.getElementById('seg4')];
+      if (!val) { meter.classList.remove('show'); return; }
+      meter.classList.add('show');
+      let score = 0;
+      if (val.length >= 8)           score++;
+      if (/[A-Z]/.test(val))         score++;
+      if (/[0-9]/.test(val))         score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      const levels = ['','weak','fair','good','strong'];
+      const labels = ['Too short','Weak','Fair','Good','Strong'];
+      segs.forEach((s, i) => {
+        s.className = 'strength-seg';
+        if (i < score) s.classList.add(levels[score]);
+      });
+      label.textContent = val.length < 8 ? 'Too short' : labels[score];
+      label.style.color = ['#8a8880','#c0392b','#e67e22','#f1c40f','#27ae60'][score] || '#8a8880';
+      if (score === 4) {
+        label.innerHTML = 'Strong <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+      }
+    }
+
+    /* ─── Password toggle ─── */
+    function togglePwd(inputId, btnId) {
+      const inp = document.getElementById(inputId);
+      const isHidden = inp.type === 'password';
+      inp.type = isHidden ? 'text' : 'password';
+      document.getElementById(btnId).querySelector('svg').innerHTML = isHidden
+        ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+    }
+
+    /* ─── Real-time confirm match ─── */
+    document.getElementById('reg-confirm').addEventListener('input', function() {
+      const pwd = document.getElementById('reg-password').value;
+      const err = document.getElementById('err-reg-confirm');
+      const bad = this.value && this.value !== pwd;
+      this.classList.toggle('has-error', bad);
+      err.classList.toggle('show', bad);
+    });
+
+    /* ─── Clear errors on re-type ─── */
+    document.querySelectorAll('input').forEach(inp => {
+      inp.addEventListener('input', function() {
+        if (this.classList.contains('has-error') && this.value) {
+          this.classList.remove('has-error');
+          const errEl = document.getElementById('err-' + this.id);
+          if (errEl) errEl.classList.remove('show');
+        }
+      });
+    });
+
+    /* ─── Nav scroll shadow ─── */
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').style.boxShadow =
+        window.scrollY > 40 ? '0 4px 32px rgba(0,0,0,0.4)' : 'none';
+    });
+  </script>
+</body>
+</html>

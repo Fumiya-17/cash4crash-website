@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Profile — Cash4Crash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #111210;
+      --bg2:      #181917;
+      --bg3:      #1e1f1d;
+      --surface:  #242523;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #f0ede8;
+      --muted:    #8a8880;
+      --accent:   #c8a96e;
+      --radius:   12px;
+      --nav-h:    72px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; background: rgba(17,18,16,0.82); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.12em;
+      color: var(--text); text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted);
+      text-decoration: none; text-transform: uppercase;
+    }
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+    .btn-ghost {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500;
+      padding: 9px 20px; border-radius: 6px; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary {
+      background: var(--accent); border: none; color: #111; font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 600; padding: 10px 22px; border-radius: 6px;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    }
+    main { flex: 1; padding: calc(var(--nav-h) + 60px) 48px 100px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 0.04em; color: var(--text); margin-bottom: 40px; }
+    
+    .profile-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px; }
+    
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; }
+    .panel h2 { font-family: 'Barlow', sans-serif; font-size: 22px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 12px 16px; background: var(--bg2); border: 1px solid var(--border);
+      color: var(--text); border-radius: 6px; font-family: 'Barlow', sans-serif; font-size: 15px; outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    
+    .stats-card { display: flex; justify-content: space-between; align-items: center; background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.2); border-radius: var(--radius); padding: 24px; margin-bottom: 32px; }
+    .stats-card div h3 { font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .stats-card div p { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--text); }
+    
+    .order-item { border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 16px; background: var(--bg3); }
+    .order-header { display: flex; justify-content: space-between; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .order-header span { font-size: 14px; color: var(--muted); }
+    .order-header strong { color: var(--text); }
+    .order-cars { display: flex; flex-direction: column; gap: 12px; }
+    .order-car { display: flex; justify-content: space-between; align-items: center; font-size: 15px; }
+    .order-car .car-name { color: var(--text); }
+    .order-car .car-price { color: var(--accent); font-weight: 500; }
+  </style>
+  
+  <!-- Firebase & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth-state.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#brands">Collections</a></li>
+      <li><a href="index.html#financing">Financing</a></li>
+      <li><a href="index.html#contact">Contacts</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="btn-ghost" style="padding: 9px 12px;" aria-label="Cart">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+      </a>
+      <button class="btn-primary" onclick="auth.signOut()">Sign Out</button>
+    </div>
+  </nav>
+
+  <main>
+    <h1 class="page-title">My Profile</h1>
+    <div id="profile-content" style="display: none;">
+      <div class="profile-grid">
+        
+        <!-- Left: Details & Address -->
+        <div class="panel">
+          <h2>Personal Details</h2>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="profile-name" readonly style="opacity: 0.7; cursor: not-allowed;" />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="profile-email" readonly style="opacity: 0.7; cursor: not-allowed;" />
+          </div>
+          
+          <h2 style="margin-top: 40px;">Delivery Address</h2>
+          <p style="color: var(--muted); font-size: 14px; margin-bottom: 16px;">This address will be used for Cash on Delivery orders.</p>
+          <div class="form-group">
+            <label>Street Address</label>
+            <input type="text" id="profile-street" placeholder="e.g. 123 Balete Drive" />
+          </div>
+          <div class="form-group">
+            <label>Barangay</label>
+            <input type="text" id="profile-barangay" placeholder="e.g. Brgy. Mariana" />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label>City</label>
+              <input type="text" id="profile-city" placeholder="e.g. Quezon City" />
+            </div>
+            <div class="form-group">
+              <label>Zip / Postal Code</label>
+              <input type="text" id="profile-zip" placeholder="e.g. 1112" />
+            </div>
+          </div>
+          <button class="btn-primary" onclick="window.location.href='admin.html'" style="width: 100%; justify-content: center; margin-bottom: 12px; background: #6b4cff; color: white; display: none;" id="admin-btn">Admin Dashboard</button>
+          <button class="btn-primary" onclick="handleAddressBtnClick()" style="width: 100%; justify-content: center; margin-bottom: 12px;" id="save-btn">Save Address</button>
+          <button class="btn-ghost" onclick="auth.signOut()" style="width: 100%; justify-content: center; color: #ff5555; border-color: rgba(255,85,85,0.3);">Sign Out of Cash4Crash</button>
+        </div>
+        
+        <!-- Right: Stats & History -->
+        <div>
+          <div class="stats-card">
+            <div>
+              <h3>Total Spent</h3>
+              <p id="total-spent">₱0</p>
+            </div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          
+          <div class="panel">
+            <h2>Purchase History</h2>
+            <div id="order-history">
+              <p style="color: var(--muted); font-size: 14px; text-align: center; padding: 20px 0;">Loading orders...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_BASE = 'http://localhost:8000/api';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          window.location.href = 'login.html';
+        } else {
+          document.getElementById('profile-content').style.display = 'block';
+          document.getElementById('profile-name').value = user.displayName || 'Unknown User';
+          document.getElementById('profile-email').value = user.email || '';
+          
+          fetchProfileData(user);
+        }
+      });
+    });
+
+    async function fetchProfileData(user) {
+      try {
+        const token = await user.getIdToken();
+        const response = await fetch(`${API_BASE}/profile`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          renderProfileData(data);
+        } else {
+          throw new Error('API not reachable or returned error');
+        }
+      } catch (err) {
+        console.warn('Backend API not available yet. Showing empty profile state.', err);
+        renderProfileData({
+          address: '',
+          total_spent: 0,
+          orders: []
+        });
+      }
+    }
+
+    function renderProfileData(data) {
+      document.getElementById('profile-street').value = data.street || '';
+      document.getElementById('profile-barangay').value = data.barangay || '';
+      document.getElementById('profile-city').value = data.city || '';
+      document.getElementById('profile-zip').value = data.zip || '';
+      
+      if (data.is_admin) {
+        document.getElementById('admin-btn').style.display = 'inline-flex';
+      }
+      
+      if (data.street || data.barangay || data.city || data.zip) {
+        setAddressFieldsEditable(false);
+      } else {
+        setAddressFieldsEditable(true);
+      }
+      
+      document.getElementById('total-spent').textContent = `₱${data.total_spent.toLocaleString()}`;
+      
+      const historyContainer = document.getElementById('order-history');
+      if (!data.orders || data.orders.length === 0) {
+        historyContainer.innerHTML = '<p style="color: var(--muted); font-size: 14px; text-align: center; padding: 20px 0;">You have not placed any orders yet.</p>';
+        return;
+      }
+      
+      let html = '';
+      data.orders.forEach(order => {
+        let itemsHtml = '';
+        order.items.forEach(item => {
+          itemsHtml += `
+            <div class="order-car">
+              <span class="car-name">${item.name} (${item.variant}) x${item.quantity}</span>
+              <span class="car-price">₱${item.price.toLocaleString()}</span>
+            </div>
+          `;
+        });
+        
+        html += `
+          <div class="order-item">
+            <div class="order-header">
+              <span>Order ID: <strong>${order.id}</strong></span>
+              <span>Date: <strong>${new Date(order.created_at).toLocaleDateString()}</strong></span>
+              <span>Total: <strong style="color:var(--accent)">₱${order.total.toLocaleString()}</strong></span>
+            </div>
+            <div class="order-cars">
+              ${itemsHtml}
+            </div>
+          </div>
+        `;
+      });
+      historyContainer.innerHTML = html;
+    }
+
+    function setAddressFieldsEditable(editable) {
+      const fields = ['profile-street', 'profile-barangay', 'profile-city', 'profile-zip'];
+      const btn = document.getElementById('save-btn');
+      
+      fields.forEach(id => {
+        const el = document.getElementById(id);
+        if (editable) {
+          el.removeAttribute('readonly');
+          el.style.opacity = '1';
+          el.style.cursor = 'text';
+        } else {
+          el.setAttribute('readonly', 'true');
+          el.style.opacity = '0.7';
+          el.style.cursor = 'not-allowed';
+        }
+      });
+
+      if (editable) {
+        btn.innerText = 'Save Address';
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-ghost');
+      } else {
+        btn.innerText = 'Edit Address';
+        btn.classList.add('btn-ghost');
+        btn.classList.remove('btn-primary');
+      }
+    }
+
+    function handleAddressBtnClick() {
+      const btn = document.getElementById('save-btn');
+      if (btn.innerText.includes('Edit')) {
+        setAddressFieldsEditable(true);
+      } else {
+        saveAddress();
+      }
+    }
+
+    async function saveAddress() {
+      const user = firebase.auth().currentUser;
+      if (!user) return;
+      
+      const btn = document.getElementById('save-btn');
+      const street = document.getElementById('profile-street').value.trim();
+      const barangay = document.getElementById('profile-barangay').value.trim();
+      const city = document.getElementById('profile-city').value.trim();
+      const zip = document.getElementById('profile-zip').value.trim();
+      
+      if (!street || !barangay || !city || !zip) {
+        alert("Please fill out all address fields.");
+        return;
+      }
+
+      const originalText = btn.innerText;
+      btn.innerText = 'Saving...';
+
+      const name = user.displayName || '';
+      const email = user.email || '';
+
+      try {
+        const token = await user.getIdToken();
+        const response = await fetch(`${API_BASE}/profile/address`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name: name, email: email, street: street, barangay: barangay, city: city, zip: zip })
+        });
+        
+        if (response.ok) {
+          btn.innerText = 'Saved ✓';
+          setTimeout(() => {
+            setAddressFieldsEditable(false);
+          }, 1500);
+        } else {
+          throw new Error('API Error');
+        }
+      } catch (err) {
+        console.error('Failed to save address to API', err);
+        // Fallback simulate save if API is down
+        btn.innerText = 'Saved locally (API unreachable)';
+        setTimeout(() => {
+          setAddressFieldsEditable(false);
+        }, 1500);
+      }
+    }
+  </script>
+</body>
+</html>

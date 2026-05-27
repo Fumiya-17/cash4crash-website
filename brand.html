@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Models — Cash4Crash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* GLOBAL STYLES */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #111210;
+      --bg2:      #181917;
+      --bg3:      #1e1f1d;
+      --surface:  #242523;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #f0ede8;
+      --muted:    #8a8880;
+      --accent:   #c8a96e;   /* warm gold */
+      --accent2:  #e8d5a8;
+      --red:      #c0392b;
+      --radius:   12px;
+      --nav-h:    72px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+    
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; background: rgba(17,18,16,0.82); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.12em; color: var(--text); text-decoration: none; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.2s; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 100%; height: 1px; background: var(--accent); transition: right 0.25s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { right: 0; }
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+    .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 20px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-primary { background: var(--accent); border: none; color: #111; font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; padding: 10px 22px; border-radius: 6px; cursor: pointer; text-transform: uppercase; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,169,110,0.25); }
+
+    /* FOOTER */
+    footer { background: var(--bg); border-top: 1px solid var(--border); padding: 64px 60px 32px; }
+    .footer-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
+    .footer-brand .logo { font-size: 22px; margin-bottom: 16px; display: block; }
+    .footer-desc { font-size: 14px; color: var(--muted); line-height: 1.75; max-width: 260px; }
+    .footer-col h4 { font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text); margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-col ul a:hover { color: var(--accent); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 32px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+
+    /* BRAND PAGE STYLES */
+    .brand-hero { padding: 120px 60px 40px; display: flex; flex-direction: column; align-items: center; background: var(--bg2); border-bottom: 1px solid var(--border); }
+    .brand-hero-logo { width: 140px; height: 140px; border-radius: 50%; border: 1px solid var(--accent); background: var(--bg3); padding: 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; }
+    .brand-hero-logo svg { width: 100%; height: 100%; }
+    .brand-title { font-family: 'Bebas Neue', sans-serif; font-size: 64px; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; }
+    
+    .search-bar { margin-top: 24px; width: 100%; max-width: 600px; display: flex; background: var(--bg3); border: 1px solid var(--border); border-radius: 30px; padding: 12px 24px; align-items: center; gap: 12px; transition: border-color 0.2s; }
+    .search-bar:focus-within { border-color: var(--accent); }
+    .search-bar input { flex: 1; background: none; border: none; color: var(--text); font-size: 16px; outline: none; }
+    .search-bar svg { color: var(--muted); }
+
+    .listings-section { padding: 80px 60px; min-height: 50vh; }
+    .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; }
+    
+    .car-card { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
+    .car-card:hover { border-color: rgba(200,169,110,0.3); box-shadow: 0 16px 40px rgba(0,0,0,0.3); }
+    .car-img-wrap { position: relative; height: 260px; background: var(--surface); }
+    .car-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .car-info { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+    .car-brand-name { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+    .car-name { font-family: 'Barlow Condensed', sans-serif; font-size: 26px; font-weight: 600; letter-spacing: 0.03em; color: var(--text); margin-bottom: 12px; }
+    .car-price-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+    .car-price { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--accent); }
+    
+    .btn-block { width: 100%; text-align: center; justify-content: center; padding: 14px; font-size: 14px; margin-top: auto; }
+    
+    /* SLIDING PANEL */
+    .car-details-panel { 
+      max-height: 0; 
+      overflow: hidden; 
+      transition: max-height 0.4s ease, padding 0.4s ease, border 0.4s ease; 
+      background: var(--bg2); 
+      border-top: 1px solid transparent; 
+    }
+    .car-details-panel.open { 
+      max-height: 1000px; /* Large enough for content */
+      padding: 24px; 
+      border-top-color: var(--border); 
+    }
+    
+    .details-title { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; color: var(--text); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; border-left: 2px solid var(--accent); padding-left: 8px; }
+    
+    .tech-specs { list-style: none; margin-bottom: 24px; }
+    .tech-specs li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.05); font-size: 14px; }
+    .tech-specs li span:first-child { color: var(--muted); }
+    .tech-specs li span:last-child { color: var(--text); font-weight: 500; }
+    
+    .shipping-section { margin-bottom: 24px; background: var(--bg3); padding: 20px; border-radius: 8px; border: 1px solid var(--border); }
+    .shipping-section select { width: 100%; padding: 12px; background: var(--surface); border: 1px solid rgba(255,255,255,0.1); color: var(--text); border-radius: 6px; margin-bottom: 12px; outline: none; font-family: 'Barlow', sans-serif; font-size: 14px; }
+    .shipping-info { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+    .eta-display { margin-top: 12px; font-size: 15px; font-weight: 600; color: var(--accent); }
+    
+    .action-buttons { display: flex; gap: 12px; }
+    .action-buttons button { flex: 1; justify-content: center; padding: 14px; font-size: 14px; }
+    
+    /* COLOR OPTIONS */
+    .color-selection { margin-bottom: 24px; }
+    .color-selection p { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+    .color-options { display: flex; gap: 12px; }
+    .color-radio { display: none; }
+    .color-label {
+      width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+      border: 2px solid transparent; transition: all 0.2s;
+    }
+    .color-radio:checked + .color-label {
+      border-color: var(--accent); transform: scale(1.15); box-shadow: 0 0 10px rgba(200,169,110,0.3);
+    }
+    .color-label[data-color="Red"] { background: #c0392b; }
+    .color-label[data-color="White"] { background: #f5f5f5; }
+    .color-label[data-color="Blue"] { background: #2980b9; }
+    .color-label[data-color="Yellow"] { background: #f1c40f; }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .listings-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .listings-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .brand-hero { padding: 100px 24px 32px; }
+      .listings-section { padding: 40px 24px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth-state.js"></script>
+  
+  <!-- Cars Data -->
+  <script src="js/cars-data.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#listings">Collections</a></li>
+      <li><a href="index.html#financing">Financing</a></li>
+      <li><a href="index.html#contact">Contacts</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="cart.html" class="btn-ghost" style="padding: 9px 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </a>
+      <a href="login.html" class="btn-primary">Sign In</a>
+    </div>
+  </nav>
+
+  <!-- BRAND HERO -->
+  <header class="brand-hero">
+    <div class="brand-hero-logo" id="brand-logo-container">
+      <!-- SVG injected here -->
+    </div>
+    <h1 class="brand-title" id="brand-title">BRAND</h1>
+    <div class="search-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search models..." onkeyup="filterCars()" />
+    </div>
+  </header>
+
+  <!-- CARS LISTING -->
+  <section class="listings-section">
+    <div class="listings-grid" id="cars-grid">
+      <!-- Car cards injected here via JS -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+        <p class="footer-desc">Redefining the pre-owned car market in the Philippines. Quality, transparency, and style.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Inventory</h4>
+        <ul>
+          <li><a href="#">New Arrivals</a></li>
+          <li><a href="#">Best Sellers</a></li>
+          <li><a href="#">Luxury Sedans</a></li>
+          <li><a href="#">Performance SUVs</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Guarantees</a></li>
+          <li><a href="#">Financing Options</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Cash4Crash. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Configuration
+    const brandLogos = {
+      'mercedes': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/><path d="M24 3 L24 24 L41 33" stroke="#c8a96e" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M24 3 L24 24 L7 33" stroke="#c8a96e" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`,
+      'audi': `<svg viewBox="0 0 80 48" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="#c8a96e" stroke-width="2.2"><circle cx="14" cy="24" r="10"/><circle cx="29" cy="24" r="10"/><circle cx="44" cy="24" r="10"/><circle cx="59" cy="24" r="10"/></g></svg>`,
+      'bmw': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/><circle cx="24" cy="24" r="14" fill="none" stroke="#c8a96e" stroke-width="1.5"/><path d="M24 3 A21 21 0 0 1 45 24 L31 24 A7 7 0 0 0 24 10 Z" fill="rgba(200,169,110,0.2)"/><path d="M24 45 A21 21 0 0 1 3 24 L17 24 A7 7 0 0 0 24 38 Z" fill="rgba(200,169,110,0.2)"/><line x1="24" y1="3" x2="24" y2="45" stroke="#c8a96e" stroke-width="1.5"/><line x1="3" y1="24" x2="45" y2="24" stroke="#c8a96e" stroke-width="1.5"/></svg>`,
+      'ford': `<svg viewBox="0 0 80 48" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="24" rx="36" ry="16" fill="none" stroke="#c8a96e" stroke-width="2"/><text x="40" y="29" text-anchor="middle" font-family="serif" font-style="italic" font-size="18" fill="#c8a96e">Ford</text></svg>`,
+      'volkswagen': `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/><path d="M14 18 L24 36 L34 18" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linejoin="round"/><path d="M18 18 L24 28 L30 18" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linejoin="round"/></svg>`
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentBrand = urlParams.get('id') || 'mercedes';
+
+    // Set Header
+    document.getElementById('brand-logo-container').innerHTML = brandLogos[currentBrand] || '';
+    document.getElementById('brand-title').textContent = currentBrand.replace('-', ' ').toUpperCase();
+
+    let brandCars = [];
+
+    function renderCars(carsToRender) {
+      const grid = document.getElementById('cars-grid');
+      grid.innerHTML = '';
+      
+      if(carsToRender.length === 0) {
+        grid.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;text-align:center;">No cars found for this brand.</p>';
+        return;
+      }
+
+      carsToRender.forEach(car => {
+        const formatPrice = '₱' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(car.price);
+        
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = `
+          <div class="car-img-wrap">
+            <img src="${car.image}" alt="${car.name}">
+          </div>
+          <div class="car-info">
+            <div class="car-brand-name">${car.make}</div>
+            <div class="car-name">${car.name} <span style="font-size:18px;color:var(--muted)">${car.model}</span></div>
+            
+            <div class="car-price-row">
+              <span class="car-price">${formatPrice}</span>
+            </div>
+            
+            <button class="btn-primary btn-block" onclick="toggleDetails('${car.id}')">View Details</button>
+          </div>
+          
+          <div class="car-details-panel" id="details-${car.id}">
+            <h4 class="details-title">Technical Specs</h4>
+            <ul class="tech-specs">
+              <li><span>Gearbox</span> <span>${car.specs.gearbox}</span></li>
+              <li><span>Fuel Type</span> <span>${car.specs.fuel}</span></li>
+              <li><span>Doors</span> <span>${car.specs.doors}</span></li>
+              <li><span>Seats</span> <span>${car.specs.seats}</span></li>
+              <li><span>Efficiency</span> <span>${car.specs.mpg} MPG</span></li>
+            </ul>
+            
+            <div class="shipping-section">
+              <h4 class="details-title">Shipping & Delivery</h4>
+              <p class="shipping-info">Free shipping • Cash on Delivery only • Free returns, no questions asked.</p>
+            </div>
+            
+            <div class="color-selection">
+              <p>Select Color</p>
+              <div class="color-options">
+                <input type="radio" id="color-red-${car.id}" name="color-${car.id}" value="Red" class="color-radio" checked>
+                <label for="color-red-${car.id}" class="color-label" data-color="Red" title="Red"></label>
+                
+                <input type="radio" id="color-white-${car.id}" name="color-${car.id}" value="White" class="color-radio">
+                <label for="color-white-${car.id}" class="color-label" data-color="White" title="White"></label>
+                
+                <input type="radio" id="color-blue-${car.id}" name="color-${car.id}" value="Blue" class="color-radio">
+                <label for="color-blue-${car.id}" class="color-label" data-color="Blue" title="Blue"></label>
+                
+                <input type="radio" id="color-yellow-${car.id}" name="color-${car.id}" value="Yellow" class="color-radio">
+                <label for="color-yellow-${car.id}" class="color-label" data-color="Yellow" title="Yellow"></label>
+              </div>
+            </div>
+            
+            <div class="quantity-selection" style="margin-bottom: 24px;">
+              <p style="font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Quantity</p>
+              <input type="number" id="quantity-${car.id}" value="1" min="1" max="10" style="width: 80px; padding: 10px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-family: 'Barlow', sans-serif;" />
+            </div>
+            
+            <div class="action-buttons">
+              <button class="btn-ghost" onclick="addToCart('${car.id}', this)">Add to Cart</button>
+              <button class="btn-primary" onclick="buyNow('${car.id}', this)">Buy Now</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function initBrandPage() {
+      await fetchCarsData();
+      brandCars = carsData.filter(c => c.brand === currentBrand);
+      renderCars(brandCars);
+    }
+
+    initBrandPage();
+
+    function filterCars() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = brandCars.filter(c => c.name.toLowerCase().includes(query) || c.model.includes(query));
+      renderCars(filtered);
+    }
+
+    function toggleDetails(carId) {
+      const panel = document.getElementById(`details-${carId}`);
+      panel.classList.toggle('open');
+    }
+
+
+
+    function addToCart(carId, buttonElement) {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const car = carsData.find(c => c.id === carId);
+      if (!car) return;
+      
+      const colorInput = document.querySelector(`input[name="color-${carId}"]:checked`);
+      const selectedColor = colorInput ? colorInput.value : 'Red';
+      
+      const qtyInput = document.getElementById(`quantity-${carId}`);
+      const selectedQty = qtyInput ? parseInt(qtyInput.value) : 1;
+      
+      const compositeId = car.id + '-' + selectedColor.toLowerCase();
+      
+      const cartKey = 'cart_' + user.uid;
+      let cart = [];
+      try {
+        const stored = localStorage.getItem(cartKey);
+        if (stored) {
+          cart = JSON.parse(stored);
+          if (!Array.isArray(cart)) cart = [];
+        }
+      } catch (e) {
+        console.error('Error parsing cart items', e);
+        cart = []; // Reset if corrupted
+      }
+      
+      const exists = cart.find(item => item.id === compositeId);
+      if (!exists) {
+        const formatPrice = '₱' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(car.price);
+        cart.push({
+          id: compositeId,
+          baseId: car.id,
+          name: car.name,
+          imgUrl: car.image,
+          price: formatPrice,
+          color: selectedColor,
+          quantity: selectedQty
+        });
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        if (buttonElement) {
+          const originalText = buttonElement.innerText;
+          buttonElement.innerText = 'Added ✓';
+          setTimeout(() => buttonElement.innerText = originalText, 2000);
+        }
+      } else {
+        exists.quantity += selectedQty;
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        if (buttonElement) {
+          const originalText = buttonElement.innerText;
+          buttonElement.innerText = 'Updated ✓';
+          setTimeout(() => buttonElement.innerText = originalText, 2000);
+        }
+      }
+    }
+
+    function buyNow(carId, buttonElement) {
+      const user = firebase.auth().currentUser;
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      addToCart(carId, buttonElement);
+      window.location.href = 'cart.html';
+    }
+
+  </script>
+</body>
+</html>

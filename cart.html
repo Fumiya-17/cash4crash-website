@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart — Cash4Crash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #111210;
+      --bg2:      #181917;
+      --bg3:      #1e1f1d;
+      --surface:  #242523;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #f0ede8;
+      --muted:    #8a8880;
+      --accent:   #c8a96e;
+      --radius:   12px;
+      --nav-h:    72px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text);
+      display: flex; flex-direction: column; min-height: 100vh;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; background: rgba(17,18,16,0.82); backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.12em;
+      color: var(--text); text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted);
+      text-decoration: none; text-transform: uppercase;
+    }
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+    .btn-ghost {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      font-family: 'Barlow', sans-serif; font-size: 13px; font-weight: 500;
+      padding: 9px 20px; border-radius: 6px; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary {
+      background: var(--accent); border: none; color: #111; font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 600; padding: 10px 22px; border-radius: 6px;
+      cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    }
+    main { flex: 1; padding: calc(var(--nav-h) + 60px) 48px 100px; max-width: 1000px; margin: 0 auto; width: 100%; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 0.04em; color: var(--text); margin-bottom: 40px; }
+    
+    .empty-cart {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 80px 40px; text-align: center;
+    }
+    .empty-cart svg { color: var(--muted); margin-bottom: 24px; opacity: 0.5; }
+    .empty-cart h2 { font-size: 24px; margin-bottom: 12px; }
+    .empty-cart p { color: var(--muted); margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; }
+  </style>
+  <!-- Firebase & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth-state.js"></script>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#brands">Collections</a></li>
+      <li><a href="index.html#financing">Financing</a></li>
+      <li><a href="index.html#contact">Contacts</a></li>
+    </ul>
+    <div class="nav-actions">
+
+      <a href="login.html" class="btn-primary">Sign In</a>
+      <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <h1 class="page-title">Your Cart</h1>
+    <div id="cart-content" style="display: none;">
+      <div class="empty-cart">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+        </svg>
+        <h2>Your cart is currently empty</h2>
+        <p>Looks like you haven't added any vehicles to your cart yet. Explore our collections to find your perfect car.</p>
+        <a href="index.html#brands" class="btn-primary" style="padding: 14px 32px; font-size: 14px;">Explore Collections</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          window.location.href = 'login.html'; // Auth Guard
+        } else {
+          document.getElementById('cart-content').style.display = 'block';
+          renderCart(user.uid);
+        }
+      });
+    });
+
+    function renderCart(uid) {
+      const cartKey = 'cart_' + uid;
+      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      const cartContainer = document.getElementById('cart-content');
+      
+      if (cart.length === 0) {
+        cartContainer.innerHTML = `
+          <div class="empty-cart">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <h2>Your cart is currently empty</h2>
+            <p>Looks like you haven't added any vehicles to your cart yet. Explore our collections to find your perfect car.</p>
+            <a href="index.html#brands" class="btn-primary" style="padding: 14px 32px; font-size: 14px;">Explore Collections</a>
+          </div>
+        `;
+        return;
+      }
+      
+      let total = 0;
+      let html = `<div style="display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap;">`;
+      
+      // Items Column
+      html += `<div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 20px;">`;
+      cart.forEach(item => {
+        const qty = item.quantity || 1;
+        const numPrice = parseInt(item.price.replace(/[^0-9]/g, ''), 10) || 0;
+        total += (numPrice * qty);
+        
+        html += `
+          <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+            <img src="${item.imgUrl}" alt="${item.name}" style="width: 140px; height: 90px; object-fit: cover; border-radius: 8px;">
+            <div style="flex: 1; min-width: 150px;">
+              <h3 style="font-family: 'Barlow', sans-serif; font-size: 20px; margin-bottom: 4px;">${item.name}</h3>
+              <p style="color: var(--muted); font-size: 14px; margin-bottom: 8px;">Color: <strong style="color: var(--text);">${item.color || 'Standard'}</strong></p>
+              <p style="color: var(--accent); font-size: 18px; font-weight: 600;">${item.price}</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <label style="font-size: 13px; color: var(--muted);">Qty:</label>
+              <input type="number" value="${qty}" min="1" max="10" onchange="updateQuantity('${item.id}', this.value)" style="width: 60px; padding: 6px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 6px; text-align: center;">
+            </div>
+            <button class="btn-ghost" onclick="removeFromCart('${item.id}')" style="color: #e74c3c; border-color: rgba(231,76,60,0.3);">Remove</button>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      
+      // Summary Column
+      let summaryItemsHtml = '';
+      cart.forEach(item => {
+        const qty = item.quantity || 1;
+        const numPrice = parseInt(item.price.replace(/[^0-9]/g, ''), 10) || 0;
+        const rowTotal = numPrice * qty;
+        
+        summaryItemsHtml += `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--text);">
+            <span style="flex: 1; padding-right: 12px;">${item.name} <span style="color: var(--muted);">x${qty}</span></span>
+            <span>₱${rowTotal.toLocaleString()}</span>
+          </div>
+        `;
+      });
+      
+      html += `
+        <div style="width: 380px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; flex-shrink: 0;">
+          <h2 style="font-family: 'Barlow', sans-serif; font-size: 22px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">Order Summary</h2>
+          ${summaryItemsHtml}
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--border); font-size: 15px; color: var(--muted);">
+            <span>Subtotal</span>
+            <span>₱${total.toLocaleString()}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 24px; font-size: 15px; color: var(--muted);">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 20px; font-weight: 600;">
+            <span>Total</span>
+            <span style="color: var(--accent);">₱${total.toLocaleString()}</span>
+          </div>
+          <a href="checkout.html" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 32px; padding: 16px; font-size: 16px;">Proceed to Checkout</a>
+        </div>
+      `;
+      
+      html += `</div>`;
+      cartContainer.innerHTML = html;
+    }
+
+    function removeFromCart(id) {
+      const uid = firebase.auth().currentUser.uid;
+      const cartKey = 'cart_' + uid;
+      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      cart = cart.filter(item => item.id !== id);
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+      renderCart(uid);
+    }
+    
+    function updateQuantity(id, qty) {
+      const parsedQty = parseInt(qty, 10);
+      if (isNaN(parsedQty) || parsedQty < 1) return;
+      
+      const uid = firebase.auth().currentUser.uid;
+      const cartKey = 'cart_' + uid;
+      let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+      
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.quantity = parsedQty;
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        renderCart(uid);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cash4Crash — Find Your Perfect Car</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #111210;
+      --bg2:      #181917;
+      --bg3:      #1e1f1d;
+      --surface:  #242523;
+      --border:   rgba(255,255,255,0.07);
+      --text:     #f0ede8;
+      --muted:    #8a8880;
+      --accent:   #c8a96e;   /* warm gold */
+      --accent2:  #e8d5a8;
+      --red:      #c0392b;
+      --light-bg: #eeecea;
+      --light-text: #1a1916;
+      --radius:   12px;
+      --nav-h:    72px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(17,18,16,0.82);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 40px; list-style: none;
+    }
+    .nav-links a {
+      font-size: 14px; font-weight: 500; letter-spacing: 0.08em;
+      color: var(--muted); text-decoration: none; text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 100%;
+      height: 1px; background: var(--accent); transition: right 0.25s;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { right: 0; }
+
+    .nav-actions { display: flex; gap: 16px; align-items: center; }
+
+    .btn-ghost {
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 9px 20px; border-radius: 6px; cursor: pointer;
+      text-transform: uppercase; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-primary {
+      background: var(--accent); border: none;
+      color: #111; font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+      padding: 10px 22px; border-radius: 6px; cursor: pointer;
+      text-transform: uppercase; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,169,110,0.25); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 60px 80px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(to right, rgba(10,10,9,0.85) 35%, rgba(10,10,9,0.15) 70%),
+        linear-gradient(to top, rgba(10,10,9,0.7) 0%, transparent 50%),
+        url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1800&q=85&auto=format&fit=crop') center/cover no-repeat;
+      transform: scale(1.04);
+      animation: heroZoom 12s ease-out forwards;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1.00); }
+    }
+
+    .hero-badge {
+      position: relative; z-index: 1;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.3);
+      padding: 6px 14px; border-radius: 100px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.1em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      position: relative; z-index: 1;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 9vw, 128px);
+      line-height: 0.92; letter-spacing: 0.02em;
+      color: var(--text);
+      opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+
+    .hero-sub {
+      position: relative; z-index: 1;
+      font-size: 16px; font-weight: 300; color: rgba(240,237,232,0.6);
+      max-width: 420px; line-height: 1.6;
+      margin-top: 20px;
+      opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+    }
+
+    .hero-ctas {
+      position: relative; z-index: 1;
+      display: flex; gap: 14px; margin-top: 36px;
+      opacity: 0; animation: fadeUp 0.8s 1s forwards;
+    }
+
+    .hero-stats {
+      position: relative; z-index: 1;
+      display: flex; gap: 48px; margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px; letter-spacing: 0.04em; color: var(--accent);
+    }
+    .stat-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted); margin-top: 2px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 32px; right: 48px; z-index: 2;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: fadeUp 0.8s 1.5s forwards;
+    }
+    .scroll-hint span {
+      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollLine 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ─── SECTIONS COMMON ─── */
+    section { padding: 100px 60px; }
+
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 1; letter-spacing: 0.02em; color: var(--text);
+    }
+
+    /* ─── BRANDS ─── */
+    .brands-section { background: var(--bg2); }
+
+    .brands-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 56px;
+    }
+
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    /* ─── BRANDS EXPAND ROW ─── */
+    .brands-extra {
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1),
+                  opacity   0.4s ease,
+                  margin-top 0.4s ease;
+      margin-top: 0;
+    }
+    .brands-extra.open {
+      max-height: 300px;
+      opacity: 1;
+      margin-top: 16px;
+    }
+    .brands-extra .brands-grid { margin-top: 0; }
+
+    /* toggle button chevron */
+    .btn-toggle-brands {
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-toggle-brands .chev {
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+    }
+    .btn-toggle-brands.expanded .chev { transform: rotate(180deg); }
+
+    .brand-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .brand-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(200,169,110,0.06), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .brand-card:hover { border-color: rgba(200,169,110,0.35); transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.35); }
+    .brand-card:hover::before { opacity: 1; }
+
+    .brand-logo { width: 72px; height: 48px; object-fit: contain; filter: brightness(0.85) contrast(1.1); transition: filter 0.2s; }
+    .brand-card:hover .brand-logo { filter: brightness(1.1) contrast(1.1); }
+
+    .brand-name {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      transition: color 0.2s;
+    }
+    .brand-card:hover .brand-name { color: var(--accent); }
+
+    /* Brand SVG logos */
+    .brand-svg { width: 72px; height: 48px; display: flex; align-items: center; justify-content: center; }
+
+    /* ─── PROMO SPLIT ─── */
+    .promo-section { padding: 100px 60px; }
+
+    .promo-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-radius: 20px; overflow: hidden;
+      min-height: 480px;
+    }
+
+    .promo-image {
+      position: relative; overflow: hidden;
+    }
+    .promo-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s;
+    }
+    .promo-grid:hover .promo-image img { transform: scale(1.04); }
+
+    .promo-content {
+      background: var(--bg3);
+      padding: 64px 56px;
+      display: flex; flex-direction: column; justify-content: center;
+      border-left: 1px solid var(--border);
+    }
+
+    .promo-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .promo-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 4vw, 58px);
+      line-height: 1; color: var(--text);
+      margin-bottom: 20px;
+    }
+    .promo-title em { color: var(--accent); font-style: normal; }
+
+    .promo-desc {
+      font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.7;
+      max-width: 340px; margin-bottom: 36px;
+    }
+
+    .btn-promo {
+      background: var(--accent); border: none;
+      color: #111; font-family: 'Barlow', sans-serif;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.08em;
+      padding: 14px 28px; border-radius: 8px; cursor: pointer;
+      text-transform: uppercase; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 10px;
+      transition: all 0.2s; align-self: flex-start; border: none;
+    }
+    .btn-promo:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(200,169,110,0.28); }
+    .btn-promo svg { transition: transform 0.2s; }
+    .btn-promo:hover svg { transform: translateX(4px); }
+
+    /* ─── WHY US ─── */
+    .why-section { background: var(--bg2); }
+
+    .why-header { margin-bottom: 64px; }
+
+    .why-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .why-card {
+      background: var(--bg3); padding: 48px 40px;
+      border: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.25s;
+    }
+    .why-card:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+    .why-card:last-child  { border-radius: 0 var(--radius) var(--radius) 0; }
+
+    .why-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 100%;
+      height: 2px; background: var(--accent); transition: right 0.4s;
+    }
+    .why-card:hover { background: var(--surface); }
+    .why-card:hover::after { right: 0; }
+
+    .why-icon {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 28px;
+      font-size: 22px;
+    }
+
+    .why-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 22px; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--text); margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+    .why-card p {
+      font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.75;
+    }
+
+    .why-num {
+      position: absolute; top: 24px; right: 28px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px; color: rgba(200,169,110,0.05);
+      line-height: 1; pointer-events: none;
+    }
+
+    /* ─── FEATURED LISTINGS ─── */
+    .listings-section { padding: 100px 60px; }
+    .listings-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 48px;
+    }
+
+    .listings-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+
+    .car-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      cursor: pointer; transition: all 0.25s;
+      text-decoration: none; color: inherit;
+      display: block;
+    }
+    .car-card:hover { transform: translateY(-6px); box-shadow: 0 28px 60px rgba(0,0,0,0.4); border-color: rgba(200,169,110,0.2); }
+
+    .car-img-wrap {
+      position: relative; overflow: hidden; height: 200px; background: var(--surface);
+    }
+    .car-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .car-card:hover .car-img-wrap img { transform: scale(1.06); }
+
+    .car-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--accent); color: #111;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 4px 10px; border-radius: 4px;
+    }
+    .car-badge.new { background: #27ae60; color: #fff; }
+    .car-badge.hot { background: var(--red); color: #fff; }
+
+    .car-info { padding: 20px 22px 24px; }
+
+    .car-brand {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+    }
+    .car-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px; font-weight: 600; letter-spacing: 0.03em;
+      color: var(--text); margin-bottom: 12px;
+    }
+
+    .car-specs {
+      display: flex; gap: 16px; margin-bottom: 18px;
+    }
+    .car-spec {
+      font-size: 12px; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .car-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .car-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.03em; color: var(--accent);
+    }
+    .car-price-label { font-size: 11px; color: var(--muted); }
+    .car-cta {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(200,169,110,0.12); border: 1px solid rgba(200,169,110,0.25);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; color: var(--accent);
+    }
+    .car-card:hover .car-cta { background: var(--accent); color: #111; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg); border-top: 1px solid var(--border);
+      padding: 64px 60px 32px;
+    }
+
+    .footer-top {
+      display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 56px;
+    }
+
+    .footer-brand .logo { font-size: 22px; margin-bottom: 16px; display: block; }
+    .footer-desc { font-size: 14px; color: var(--muted); line-height: 1.75; max-width: 260px; }
+
+    .footer-col h4 {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--text); margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul a {
+      font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col ul a:hover { color: var(--accent); }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 32px; border-top: 1px solid var(--border);
+      font-size: 13px; color: var(--muted);
+    }
+
+    .social-links { display: flex; gap: 12px; }
+    .social-link {
+      width: 34px; height: 34px; border-radius: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); transition: all 0.2s; text-decoration: none;
+      font-size: 14px;
+    }
+    .social-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── HAMBURGER (mobile) ─── */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-nav {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(17,18,16,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px; letter-spacing: 0.06em; color: var(--text);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .mobile-nav a:hover { color: var(--accent); }
+    .close-btn {
+      position: absolute; top: 24px; right: 24px;
+      background: none; border: none; cursor: pointer;
+      font-size: 32px; color: var(--muted);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .brands-grid { grid-template-columns: repeat(3, 1fr); }
+      .listings-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links, .nav-actions .btn-ghost { display: none; }
+      .hamburger { display: flex; }
+
+      section, .promo-section, .listings-section { padding: 72px 24px; }
+      .hero { padding: 0 24px 72px; }
+
+      .hero h1 { font-size: clamp(52px, 14vw, 80px); }
+      .hero-stats { gap: 28px; flex-wrap: wrap; }
+      .scroll-hint { display: none; }
+
+      .brands-grid { grid-template-columns: repeat(2, 1fr); }
+      .brands-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+
+      .promo-grid { grid-template-columns: 1fr; min-height: auto; }
+      .promo-image { height: 280px; }
+      .promo-content { padding: 40px 32px; }
+
+      .why-grid { grid-template-columns: 1fr; }
+      .why-card:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+      .why-card:last-child  { border-radius: 0 0 var(--radius) var(--radius); }
+
+      .listings-header { flex-direction: column; gap: 20px; align-items: flex-start; }
+      .listings-grid { grid-template-columns: 1fr; }
+
+      .footer-top { grid-template-columns: 1fr; }
+      footer { padding: 48px 24px 24px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+  <!-- Firebase & Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/auth-state.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="navTo('home');return false;">Home</a></li>
+      <li><a href="#" onclick="navTo('collections');return false;">Collections</a></li>
+      <li><a href="#" onclick="navTo('financing');return false;">Financing</a></li>
+      <li><a href="#" onclick="navTo('contact');return false;">Contacts</a></li>
+    </ul>
+    <div class="nav-actions">
+
+      <a href="login.html" class="btn-primary">Sign In</a>
+      <button class="hamburger" onclick="toggleNav()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="close-btn" onclick="toggleNav()" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <a href="#" onclick="navTo('home');toggleNav();return false;">Home</a>
+    <a href="#" onclick="navTo('collections');toggleNav();return false;">Collections</a>
+    <a href="#" onclick="navTo('financing');toggleNav();return false;">Financing</a>
+    <a href="#" onclick="navTo('contact');toggleNav();return false;">Contacts</a>
+    <a href="login.html" class="btn-primary" style="font-family:'Barlow',sans-serif;font-size:14px;">Sign In</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l2.5 2.5"/></svg>
+      &nbsp; Philippines' Premier Auto Marketplace
+    </div>
+    <h1>Find Your<br/><em>Perfect</em><br/>Car.</h1>
+    <p class="hero-sub">Browse thousands of pre-screened vehicles from trusted dealers. Get a fair price — every time.</p>
+    <div class="hero-ctas">
+      <a href="#listings" class="btn-primary" style="font-size:15px; padding:14px 32px;">
+        Browse Inventory
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="btn-ghost" style="font-size:15px; padding:14px 32px;">Get Financing</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">2,400+</div>
+        <div class="stat-label">Vehicles Listed</div>
+      </div>
+      <div>
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Satisfied Buyers</div>
+      </div>
+      <div>
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brands-section" id="brands">
+    <div class="brands-header">
+      <div>
+        <div class="section-label">Our Partners</div>
+        <h2 class="section-title">Explore Brands</h2>
+      </div>
+
+    </div>
+
+    <!-- ROW 1 — always visible -->
+    <div class="brands-grid" id="brands-row1">
+
+      <!-- Audi -->
+      <a href="brand.html?id=audi" class="brand-card">
+        <div class="brand-svg">
+          <svg viewBox="0 0 80 48" width="80" height="48" xmlns="http://www.w3.org/2000/svg">
+            <g fill="none" stroke="#c8a96e" stroke-width="2.2">
+              <circle cx="14" cy="24" r="10"/>
+              <circle cx="29" cy="24" r="10"/>
+              <circle cx="44" cy="24" r="10"/>
+              <circle cx="59" cy="24" r="10"/>
+            </g>
+          </svg>
+        </div>
+        <span class="brand-name">Audi</span>
+      </a>
+
+      <!-- BMW -->
+      <a href="brand.html?id=bmw" class="brand-card">
+        <div class="brand-svg">
+          <svg viewBox="0 0 48 48" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/>
+            <circle cx="24" cy="24" r="14" fill="none" stroke="#c8a96e" stroke-width="1.5"/>
+            <path d="M24 3 A21 21 0 0 1 45 24 L31 24 A7 7 0 0 0 24 10 Z" fill="rgba(200,169,110,0.2)"/>
+            <path d="M24 45 A21 21 0 0 1 3 24 L17 24 A7 7 0 0 0 24 38 Z" fill="rgba(200,169,110,0.2)"/>
+            <line x1="24" y1="3" x2="24" y2="45" stroke="#c8a96e" stroke-width="1.5"/>
+            <line x1="3" y1="24" x2="45" y2="24" stroke="#c8a96e" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <span class="brand-name">BMW</span>
+      </a>
+
+      <!-- Ford -->
+      <a href="brand.html?id=ford" class="brand-card">
+        <div class="brand-svg">
+          <svg viewBox="0 0 80 48" width="80" height="48" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="40" cy="24" rx="36" ry="16" fill="none" stroke="#c8a96e" stroke-width="2"/>
+            <text x="40" y="29" text-anchor="middle" font-family="serif" font-style="italic" font-size="18" fill="#c8a96e">Ford</text>
+          </svg>
+        </div>
+        <span class="brand-name">Ford</span>
+      </a>
+
+      <!-- Mercedes -->
+      <a href="brand.html?id=mercedes" class="brand-card">
+        <div class="brand-svg">
+          <svg viewBox="0 0 48 48" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/>
+            <path d="M24 3 L24 24 L41 33" stroke="#c8a96e" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M24 3 L24 24 L7 33" stroke="#c8a96e" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">Mercedes-Benz</span>
+      </a>
+
+      <!-- Volkswagen -->
+      <a href="brand.html?id=volkswagen" class="brand-card">
+        <div class="brand-svg">
+          <svg viewBox="0 0 48 48" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="24" r="21" fill="none" stroke="#c8a96e" stroke-width="2"/>
+            <path d="M14 18 L24 36 L34 18" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M18 18 L24 28 L30 18" fill="none" stroke="#c8a96e" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">Volkswagen</span>
+      </a>
+
+    </div><!-- /brands-row1 -->
+
+
+
+  </section>
+
+  <!-- PROMO SPLIT -->
+  <div class="promo-section" id="financing">
+    <div class="promo-grid">
+      <div class="promo-image">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=85&auto=format&fit=crop" alt="Audi on open road" />
+      </div>
+      <div class="promo-content">
+        <div class="promo-tag">First-Time Buyers</div>
+        <h2 class="promo-title">Get a <em>Fair Price</em><br/>for Your<br/>First Car.</h2>
+        <p class="promo-desc">Our stress-free finance department finds the best solutions tailored to your budget — no hidden fees, no pressure.</p>
+        <a href="https://youtu.be/dQw4w9WgXcQ" target="_blank" class="btn-promo">
+          Explore Financing
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED LISTINGS -->
+  <section class="listings-section" id="listings">
+    <div class="listings-header">
+      <div>
+        <div class="section-label">Hand-Picked Selection</div>
+        <h2 class="section-title">Featured Vehicles</h2>
+      </div>
+      <a href="#" class="btn-ghost">View All →</a>
+    </div>
+    <div class="listings-grid">
+
+      <a href="brand.html?id=bmw" class="car-card">
+        <div class="car-img-wrap">
+          <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=700&q=80&auto=format&fit=crop" alt="BMW M3" />
+          <span class="car-badge hot">Hot Deal</span>
+        </div>
+        <div class="car-info">
+          <div class="car-brand">BMW</div>
+          <div class="car-name">M3 Competition xDrive</div>
+          <div class="car-specs">
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 2023</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 510 hp</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M3 6h18M3 18h18"/></svg> 12k km</span>
+          </div>
+          <div class="car-footer">
+            <div>
+              <div class="car-price-label">Starting at</div>
+              <div class="car-price">₱4,800,000</div>
+            </div>
+            <div class="car-cta">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="brand.html?id=mercedes" class="car-card">
+        <div class="car-img-wrap">
+          <img src="https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=700&q=80&auto=format&fit=crop" alt="Mercedes C-Class" />
+          <span class="car-badge new">New Arrival</span>
+        </div>
+        <div class="car-info">
+          <div class="car-brand">Mercedes-Benz</div>
+          <div class="car-name">C 300 AMG Line</div>
+          <div class="car-specs">
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 2024</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 258 hp</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M3 6h18M3 18h18"/></svg> 5k km</span>
+          </div>
+          <div class="car-footer">
+            <div>
+              <div class="car-price-label">Starting at</div>
+              <div class="car-price">₱4,200,000</div>
+            </div>
+            <div class="car-cta">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a href="brand.html?id=audi" class="car-card">
+        <div class="car-img-wrap">
+          <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=700&q=80&auto=format&fit=crop" alt="Audi RS5" />
+          <span class="car-badge">Certified</span>
+        </div>
+        <div class="car-info">
+          <div class="car-brand">Audi</div>
+          <div class="car-name">RS5 Sportback</div>
+          <div class="car-specs">
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> 2022</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> 450 hp</span>
+            <span class="car-spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M3 6h18M3 18h18"/></svg> 28k km</span>
+          </div>
+          <div class="car-footer">
+            <div>
+              <div class="car-price-label">Starting at</div>
+              <div class="car-price">₱3,950,000</div>
+            </div>
+            <div class="car-cta">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section" id="why">
+    <div class="why-header">
+      <div class="section-label">Our Promise</div>
+      <h2 class="section-title">Why Choose Us?</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M9 16h6"/></svg>
+        </div>
+        <div class="why-num">01</div>
+        <h3>Special Financing Offers</h3>
+        <p>Our stress-free finance department works with multiple lenders to find the solution that saves you the most money — whatever your credit situation.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="why-num">02</div>
+        <h3>Trusted Car Dealership</h3>
+        <p>Every vehicle undergoes a rigorous 150-point inspection by certified technicians before it reaches our showroom floor.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c8a96e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="why-num">03</div>
+        <h3>Transparent Pricing</h3>
+        <p>No haggling, no hidden fees. The price you see is the price you pay — backed by our market-matched guarantee.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">CASH<span>4</span>CRASH</a>
+        <p class="footer-desc">Philippines' premier auto marketplace. Connecting buyers with their dream vehicles since 2009.</p>
+        <div class="social-links" style="margin-top:24px;">
+          <a href="#" class="social-link" aria-label="Facebook">f</a>
+          <a href="#" class="social-link" aria-label="Instagram">ig</a>
+          <a href="#" class="social-link" aria-label="TikTok">tt</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Inventory</h4>
+        <ul>
+          <li><a href="#">Sedans</a></li>
+          <li><a href="#">SUVs & Crossovers</a></li>
+          <li><a href="#">Sports Cars</a></li>
+          <li><a href="#">Trucks & Vans</a></li>
+          <li><a href="#">Electric Vehicles</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">Car Financing</a></li>
+          <li><a href="#">Trade-In Valuation</a></li>
+          <li><a href="#">Car Insurance</a></li>
+          <li><a href="#">Vehicle History</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Cash4Crash. All rights reserved.</span>
+      <span>Made with <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;color:var(--accent)"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#c8a96e"/></svg> in the Philippines</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('mobileNav').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+    }
+
+    /* ─── NAV SCROLL ROUTING ─── */
+    function navTo(target) {
+      if (target === 'home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      if (target === 'collections') {
+        const section = document.getElementById('brands');
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Auto-expand the brands row after scroll lands
+        setTimeout(() => {
+          const extra = document.getElementById('brands-extra');
+          if (!extra.classList.contains('open')) toggleBrands();
+        }, 600);
+        return;
+      }
+      const el = document.getElementById(target);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    /* ─── BRANDS EXPAND / COLLAPSE ─── */
+    function toggleBrands() {
+      const extra  = document.getElementById('brands-extra');
+      const btn    = document.getElementById('btn-brands-toggle');
+      const isOpen = extra.classList.toggle('open');
+
+      btn.classList.toggle('expanded', isOpen);
+
+      // Swap button label
+      const label = isOpen ? 'Show Less' : 'View All Brands';
+      btn.childNodes[0].textContent = label + ' ';
+
+      // Trigger scroll-reveal on the newly shown cards when opening
+      if (isOpen) {
+        extra.querySelectorAll('.brand-card').forEach((el, i) => {
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(30px)';
+          el.style.transition = `opacity 0.5s ${0.08 + i * 0.08}s, transform 0.5s ${0.08 + i * 0.08}s`;
+          // Small tick lets the CSS transition fire after the container opens
+          setTimeout(() => {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          }, 30);
+        });
+      }
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.style.opacity = '1';
+          el.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('#brands-row1 .brand-card, .car-card, .why-card, .promo-grid').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(30px)';
+      el.style.transition = `opacity 0.6s ${i * 0.08}s, transform 0.6s ${i * 0.08}s`;
+      observer.observe(el);
+    });
+
+    // Nav shadow on scroll
+    window.addEventListener('scroll', () => {
+      document.querySelector('nav').style.boxShadow =
+        window.scrollY > 40 ? '0 4px 32px rgba(0,0,0,0.4)' : 'none';
+    });
+  </script>
+</body>
+</html>
