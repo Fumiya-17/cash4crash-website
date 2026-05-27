@@ -14,6 +14,9 @@ logging.basicConfig(level=logging.INFO)
 # Create DB Tables
 Base.metadata.create_all(bind=engine)
 
+from analytics_database import engine as analytics_engine, BaseAnalytics
+BaseAnalytics.metadata.create_all(bind=analytics_engine)
+
 import seed_cars
 # Automatically seed cars if the database is empty
 seed_cars.seed()
