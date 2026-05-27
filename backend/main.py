@@ -15,8 +15,6 @@ logging.basicConfig(level=logging.INFO)
 Base.metadata.create_all(bind=engine)
 
 import seed_cars
-# Automatically seed cars if the database is empty
-seed_cars.seed()
 
 app = FastAPI(title="Cash4Crash Backend")
 
