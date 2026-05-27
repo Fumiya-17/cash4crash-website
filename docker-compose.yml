@@ -21,8 +21,6 @@ services:
     environment:
       DATABASE_URL: postgresql://postgres:admin@db:5432/cash4crash_db
       ANALYTICS_DATABASE_URL: postgresql://postgres:admin@db:5432/cash4crash_analytics
-    ports:
-      - "8000:8000"
     depends_on:
       - db
 

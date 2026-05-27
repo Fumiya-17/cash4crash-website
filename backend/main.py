@@ -14,14 +14,17 @@ logging.basicConfig(level=logging.INFO)
 # Create DB Tables
 Base.metadata.create_all(bind=engine)
 
-# Auto-seed the database on startup if it's empty
 import seed_cars
-try:
-    seed_cars.seed()
-except Exception as e:
-    print(f"Auto-seeding skipped or failed: {e}")
 
 app = FastAPI(title="Cash4Crash Backend")
+
+@app.get("/api/seed")
+def auto_seed():
+    try:
+        seed_cars.seed()
+        return {"message": "Database seeded successfully!"}
+    except Exception as e:
+        return {"error": str(e)}
 
 # Allow requests from frontend
 app.add_middleware(
