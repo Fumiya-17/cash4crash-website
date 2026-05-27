@@ -267,6 +267,10 @@
               <span class="car-price">${formatPrice}</span>
             </div>
             
+            <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">
+              ${isOutOfStock ? '<span style="color:var(--red);font-weight:600;">Out of Stock</span>' : `<strong>${car.stock !== undefined ? car.stock : 5}</strong> left in stock`}
+            </div>
+            
             <button class="btn-primary btn-block" onclick="toggleDetails('${car.id}')">View Details</button>
           </div>
           
@@ -393,6 +397,10 @@
           setTimeout(() => buttonElement.innerText = originalText, 2000);
         }
       } else {
+        if (exists.quantity + selectedQty > car.stock) {
+          alert(`You cannot buy more than the available stock (${car.stock}). You already have ${exists.quantity} in your cart.`);
+          return;
+        }
         exists.quantity += selectedQty;
         localStorage.setItem(cartKey, JSON.stringify(cart));
         if (buttonElement) {
