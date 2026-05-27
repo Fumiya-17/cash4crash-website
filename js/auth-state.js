@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Sync user with PostgreSQL backend silently
       try {
         const token = await user.getIdToken();
-        fetch('http://localhost:8000/api/auth/sync', {
+        fetch('/api/auth/sync', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

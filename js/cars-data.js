@@ -2,7 +2,7 @@ let carsData = [];
 
 async function fetchCarsData() {
   try {
-    const res = await fetch('http://localhost:8000/api/cars');
+    const res = await fetch('/api/cars');
     if (res.ok) {
        const data = await res.json();
        carsData = data.map(c => ({

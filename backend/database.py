@@ -6,7 +6,11 @@ from sqlalchemy.orm import sessionmaker
 # This URL will be changed to a postgresql URL in production (e.g. postgresql://user:pass@host/db)
 #SQLALCHEMY_DATABASE_URL = "sqlite:///./cash4crash.db"
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:admin@localhost:5432/cash4crash_db"
+import os
+SQLALCHEMY_DATABASE_URL = os.environ.get(
+    "DATABASE_URL", 
+    "postgresql://postgres:admin@localhost:5432/cash4crash_db"
+)
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
