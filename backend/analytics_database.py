@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 SQLALCHEMY_DATABASE_URL = os.environ.get(
     "ANALYTICS_DATABASE_URL", 
-    "postgresql://postgres:admin@localhost:5432/cash4crash_analytics"
+    "postgresql://postgres:admin@db:5432/cash4crash_analytics"
 )
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL

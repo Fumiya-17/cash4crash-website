@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 SQLALCHEMY_DATABASE_URL = os.environ.get(
     "DATABASE_URL", 
-    "postgresql://postgres:admin@localhost:5432/cash4crash_db"
+    "postgresql://postgres:admin@db:5432/cash4crash_db"
 )
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
