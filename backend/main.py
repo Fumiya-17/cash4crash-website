@@ -146,6 +146,9 @@ def process_checkout(payload: schemas.OrderCreate, uid: str = Depends(get_curren
         car = db.query(models.Car).filter(models.Car.id == item.baseId).first()
         if not car:
             raise HTTPException(status_code=404, detail=f"Car {item.baseId} not found")
+        if car.stock < item.quantity:
+            raise HTTPException(status_code=400, detail=f"Not enough stock for {car.name}")
+        car.stock -= item.quantity
         real_total += (car.price * item.quantity)
         items_to_add.append((car, item))
         
@@ -185,7 +188,7 @@ def get_cars(db: Session = Depends(get_db)):
             specs = {}
         result.append({
             "id": c.id, "brand": c.brand, "name": c.name, "make": c.make, 
-            "model_year": c.model_year, "image": c.image, "price": c.price, "specs": specs
+            "model_year": c.model_year, "image": c.image, "price": c.price, "stock": c.stock, "specs": specs
         })
     return result
 
@@ -205,6 +208,7 @@ def update_car(car_id: str, payload: schemas.CarUpdate, uid: str = Depends(get_c
     car.model_year = payload.model_year
     car.image = payload.image
     car.price = payload.price
+    car.stock = payload.stock
     car.specs = json.dumps(payload.specs)
     
     db.commit()

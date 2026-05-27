@@ -10,6 +10,7 @@ class CarUpdate(BaseModel):
     model_year: str
     image: str
     price: float
+    stock: int
     specs: Dict[str, Any]
 
 class CarResponse(BaseModel):
@@ -20,6 +21,7 @@ class CarResponse(BaseModel):
     model_year: str
     image: str
     price: float
+    stock: int
     specs: Dict[str, Any]
 
     class Config:

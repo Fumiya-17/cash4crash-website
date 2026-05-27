@@ -114,6 +114,7 @@ def seed():
                 model_year=c["model"],
                 image=c["image"],
                 price=c["price"],
+                stock=c.get("stock", 5),
                 specs=json.dumps(c["specs"])
             )
             db.add(car)

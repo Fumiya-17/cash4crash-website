@@ -13,6 +13,7 @@ class Car(Base):
     model_year = Column(String)
     image = Column(String)
     price = Column(Float)
+    stock = Column(Integer, default=5)
     specs = Column(String) # Store as JSON string
 
 class User(Base):

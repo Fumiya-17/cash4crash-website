@@ -13,6 +13,7 @@ async function fetchCarsData() {
            model: c.model_year,
            image: c.image,
            price: c.price,
+           stock: c.stock,
            specs: c.specs
        }));
     } else {

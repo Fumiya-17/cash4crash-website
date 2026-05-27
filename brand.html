@@ -248,13 +248,16 @@
       }
 
       carsToRender.forEach(car => {
+        const isOutOfStock = car.stock !== undefined && car.stock <= 0;
         const formatPrice = '₱' + new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(car.price);
+        const outOfStockBadge = isOutOfStock ? `<div style="position:absolute;top:16px;right:16px;background:var(--red);color:#fff;padding:6px 12px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;border-radius:4px;z-index:2;">Out of Stock</div>` : '';
         
         const card = document.createElement('div');
         card.className = 'car-card';
         card.innerHTML = `
           <div class="car-img-wrap">
-            <img src="${car.image}" alt="${car.name}">
+            ${outOfStockBadge}
+            <img src="${car.image}" alt="${car.name}" style="${isOutOfStock ? 'filter: grayscale(100%); opacity: 0.5;' : ''}">
           </div>
           <div class="car-info">
             <div class="car-brand-name">${car.make}</div>
@@ -300,13 +303,13 @@
             </div>
             
             <div class="quantity-selection" style="margin-bottom: 24px;">
-              <p style="font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Quantity</p>
-              <input type="number" id="quantity-${car.id}" value="1" min="1" max="10" style="width: 80px; padding: 10px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-family: 'Barlow', sans-serif;" />
+              <p style="font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px;">Quantity ${car.stock !== undefined && !isOutOfStock ? `(${car.stock} available)` : ''}</p>
+              <input type="number" id="quantity-${car.id}" value="1" min="1" max="${car.stock !== undefined ? car.stock : 10}" ${isOutOfStock ? 'disabled' : ''} style="width: 80px; padding: 10px; background: var(--bg3); border: 1px solid var(--border); color: var(--text); border-radius: 6px; font-family: 'Barlow', sans-serif;" />
             </div>
             
             <div class="action-buttons">
-              <button class="btn-ghost" onclick="addToCart('${car.id}', this)">Add to Cart</button>
-              <button class="btn-primary" onclick="buyNow('${car.id}', this)">Buy Now</button>
+              <button class="btn-ghost" onclick="addToCart('${car.id}', this)" ${isOutOfStock ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>Add to Cart</button>
+              <button class="btn-primary" onclick="buyNow('${car.id}', this)" ${isOutOfStock ? 'disabled style="opacity: 0.5; cursor: not-allowed; background: var(--border);"' : ''}>Buy Now</button>
             </div>
           </div>
         `;
@@ -344,6 +347,11 @@
       
       const car = carsData.find(c => c.id === carId);
       if (!car) return;
+      
+      if (car.stock !== undefined && car.stock <= 0) {
+        alert('This vehicle is currently out of stock.');
+        return;
+      }
       
       const colorInput = document.querySelector(`input[name="color-${carId}"]:checked`);
       const selectedColor = colorInput ? colorInput.value : 'Red';
